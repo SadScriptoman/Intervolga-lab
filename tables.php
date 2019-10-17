@@ -1,13 +1,7 @@
 <!doctype html>
 <?php
     session_start();
-    if (isset($_SESSION['login'])){
-        $connect = mysqli_connect('localhost', 'root', '');
-        mysqli_select_db($connect, 'lab');
-        mysqli_query($connect,"SET NAMES 'utf8'"); 
-        mysqli_query($connect,"SET CHARACTER SET 'utf8'");
-        mysqli_query($connect,"SET SESSION collation_connection = 'utf8_general_ci'");
-    }
+    require_once("db-connect.php");//подключение к бд через PDO
 ?>
 <html lang="ru">
   <head>
@@ -73,9 +67,7 @@
             <h1>
                 Страница не найдена! 
             </h1>
-        <? else:
-            $query = mysqli_query($connect, 'SELECT * FROM tables');
-        ?>
+        <? else:?>
         <table class="w-100">
             <tr>
                 <th>Номер столика</th>
@@ -83,12 +75,13 @@
                 <th>Время</th>
             </tr>
             <?
-                while ($result = mysqli_fetch_array($query)) {
+                $result = $db->query("SELECT * FROM tables");
+                foreach($result as $result_value){
                     echo 
                     "<tr>
-                        <td>{$result['table_id']}</td>
-                        <td>{$result['fio']}</td>
-                        <td>{$result['date_time']}</td>
+                        <td>{$result_value['table_id']}</td>
+                        <td>{$result_value['fio']}</td>
+                        <td>{$result_value['date_time']}</td>
                     </tr>";
                 }
             ?>
