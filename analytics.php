@@ -33,10 +33,10 @@
                     $str = $db->prepare("INSERT INTO pages (page_url, page_title) VALUES ('$page_url', '$page_title')");
                 else
                     $str = $db->prepare("INSERT INTO pages (page_url) VALUES ('$page_url')");
-                $str->execute();
+                $str->execute() or die("Произошла ошибка с отправкой данных в таблицу pages!");
 
                 $str = $db->prepare("SELECT page_id FROM pages WHERE page_url = '$page_url'");
-                $str->execute();
+                $str->execute() or die("Произошла ошибка c получением данных из таблицы pages!");
                 $result = $str->fetch(PDO::FETCH_ASSOC);
                 if (isset($_SESSION['login'])) echo "<br><br>Страница добавлена в аналитику!";
             }
@@ -47,14 +47,14 @@
             $result = $str->fetch(PDO::FETCH_ASSOC);
             if ($result){//проверяем есть ли пользователь с таким ip в базе
                 $count = (int)$result["visited_this_page"] + 1;//сколько раз пользователь с таким ip зашел на эту страницу
-                $db->exec("UPDATE analytics SET visited_this_page = $count WHERE visitor_ip = '$visitor_ip' AND visited_page_id = '$page_id'");
+                $db->exec("UPDATE analytics SET visited_this_page = $count WHERE visitor_ip = '$visitor_ip' AND visited_page_id = '$page_id'") or die("Произошла ошибка с обновлением данных в таблице analytics!");
             }
             else{
-                $str = $db->prepare("INSERT INTO analytics (visitor_ip, visited_page_id, visitor_ref, visited_this_page) VALUES ('$visitor_ip', '$page_id', '$visitor_ref', 1)");
+                $str = $db->prepare("INSERT INTO analytics (visitor_ip, visited_page_id, visitor_ref, visited_this_page) VALUES ('$visitor_ip', '$page_id', '$visitor_ref', 1)") or die("Произошла ошибка с отправкой данных в таблицу analytics!");
                 $str->execute();
             }
 
         }
-        else echo "<br><br>Невозможно подключиться к базе данных";
+        else echo '<div class="alert container alert-danger mt-5 mb-5" role="alert">Аналитика не работает, так как подключение к бд настрено неправильно!</div>';
     }
 ?>

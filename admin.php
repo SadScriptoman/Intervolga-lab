@@ -1,7 +1,9 @@
 <!doctype html>
 <?php
-    session_start();
+  session_start();
+  if (isset($_SESSION['login'])){
     require_once("db-connect.php");//подключение к бд через PDO
+  }
 ?>
 <html lang="ru" >
 <head>
@@ -61,14 +63,14 @@
     <main role="main" id="main" >
 
         <div class="mt-5 container">
-            <? if (!isset($_SESSION['login'])):
+            <? if ((!isset($_SESSION['login']) && ($db != NULL))):
                 header('HTTP/1.0 404 Not Found');
                 header('Status: 404 Not Found');
                 ?>
                 <h1>
                     Страница не найдена! 
                 </h1>
-            <? else:
+            <? elseif ($db):
                 $pages = $db->query("SELECT * FROM pages");
                 $visitors = $db->query("SELECT * FROM analytics");
             ?>
