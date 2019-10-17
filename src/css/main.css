@@ -106,6 +106,12 @@ body {
     padding: 15px;
     margin: auto;
   }
+
+  
+  .plus img{
+    width: 64px;
+    height: 64px;
+  }
   
   /* RESPONSIVE CSS
   -------------------------------------------------- */
