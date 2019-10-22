@@ -56,6 +56,6 @@
             }
 
         }
-        else echo '<div class="alert container alert-danger mt-5 mb-5" role="alert">Аналитика не работает, так как подключение к бд настрено неправильно!</div>';
+        else echo '<div class="alert container alert-danger mt-5" role="alert">Аналитика не работает, так как подключение к бд настрено неправильно!</div>';
     }
 ?>

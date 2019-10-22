@@ -6,7 +6,7 @@
             PDO::ATTR_ERRMODE=>TRUE
         ));
     }catch(PDOException $e){
-        echo '<div class="alert container alert-danger mt-5" role="alert">
+        echo '<br><br><div class="alert container alert-danger mt-5" role="alert">
         Подключение к бд не удалось: ' . $e->getMessage(). '</div>';
      
     }

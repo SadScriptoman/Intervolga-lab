@@ -166,6 +166,5 @@
 
 </main>
 
-<?
-  require_once("templates/footer.php");
-?>
+</body>
+</html>

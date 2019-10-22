@@ -147,6 +147,5 @@
 </main>
 
 <?
-  $all_scripts = true;
   require_once("templates/footer.php");
 ?>

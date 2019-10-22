@@ -8,7 +8,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" >
-    <link rel="stylesheet" href="src/css/main.css?v1.12">
+    <link rel="stylesheet" href="src/css/main.css">
 
 
   </head>
