@@ -190,6 +190,7 @@
 </main>
 
 <script src="jquery/jquery-3.4.1.min.js" ></script>
+<script src="jquery/mask.min.js" ></script>
 <script src="bootstrap/bootstrap.bundle.min.js" ></script>
 
 <script type="text/javascript">
@@ -205,6 +206,7 @@
     (function() {
       'use strict';
       window.addEventListener('load', function() {
+        $("#tel").mask("+7 (999) 999-99-99");
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         var forms = document.getElementsByClassName('needs-validation');
         // Loop over them and prevent submission
