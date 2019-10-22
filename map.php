@@ -1,9 +1,10 @@
-<!doctype html>
 <?php
     session_start();
     $page_title = "Рестораны";
+    setcookie("ref", $_SERVER['PHP_SELF']);
     require_once("analytics.php");
 ?>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="utf-8">
@@ -22,14 +23,14 @@
 
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="main.php"><h3>Ресторан</h3></a>
+        <a class="navbar-brand" href="index.php"><h3>Ресторан</h3></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="main.php">Главная</a>
+              <a class="nav-link" href="index.php">Главная</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="menu.php">Меню</a>
@@ -39,7 +40,7 @@
             </li>
             <? if (isset($_SESSION['login'])):?>
               <li class="nav-item">
-                  <a class="nav-link" href="tables.php">Забронированные столики</a>
+                  <a class="nav-link" href="reservations.php">Забронированные столики</a>
               </li>
               <li class="nav-item">
                   <a class="nav-link" href="admin.php">Аналитика</a>

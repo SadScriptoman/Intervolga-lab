@@ -1,36 +1,32 @@
-<!doctype html>
 <?php
   session_start();
+  setcookie("ref", $_SERVER['PHP_SELF']);
   if (isset($_SESSION['login'])){
     require_once("db-connect.php");//подключение к бд через PDO
   }
 ?>
+<!doctype html>
 <html lang="ru" >
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Ресторан</title>
+  <title>Админ-панель</title>
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="bootstrap/bootstrap.min.css" >
-  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/main.css?v=1.1">
 </head>
 
 <body <? if (isset($_SESSION['login'])) echo "class=\"bg-dark\""?>>
-  <style>
-    table a{
-      color: inherit!important;
-    }
-  </style>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="main.php"><h3>Ресторан</h3></a>
+            <a class="navbar-brand" href="index.php"><h3>Ресторан</h3></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"   aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <a class="nav-link" href="main.php">Главная</a>
+                  <a class="nav-link" href="index.php">Главная</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="menu.php">Меню</a>
@@ -40,7 +36,7 @@
                 </li>
                 <? if (isset($_SESSION['login'])):?>
                   <li class="nav-item">
-                      <a class="nav-link" href="tables.php">Забронированные столики</a>
+                      <a class="nav-link" href="reservations.php">Забронированные столики</a>
                   </li>
                   <li class="nav-item active">
                       <a class="nav-link" href="admin.php">Аналитика</a>
@@ -63,12 +59,10 @@
     <main role="main" id="main" >
 
         <div class="mt-5 container">
-            <? if ((!isset($_SESSION['login']) && ($db != NULL))):
-                header('HTTP/1.0 404 Not Found');
-                header('Status: 404 Not Found');
+            <? if ((!isset($_SESSION['login']) || ($db == NULL))):
                 ?>
                 <h1>
-                    Страница не найдена! 
+                  Вы должны зайти в аккаунт чтобы просмотреть содержимое!
                 </h1>
             <? elseif ($db):
                 $pages = $db->query("SELECT * FROM pages");
@@ -109,13 +103,16 @@
                           echo count($result);
                         ?>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" style="width: 25%; ">
                         <?
                           $str = $db->prepare("SELECT visitor_ref FROM analytics WHERE visited_page_id = $page_id");
                           $str->execute();
                           $result = $str->fetchAll(PDO::FETCH_ASSOC);
-                          foreach ($result as $value) {
-                            echo "<a href=\"".$value["visitor_ref"]."\">".$value["visitor_ref"]."</a>";
+                          foreach ($result as $key => $value) {
+                            if ($key == 0)
+                              echo "<a href=\"".$value["visitor_ref"]."\">".$value["visitor_ref"]."</a>";
+                            else
+                              echo ", <a href=\"".$value["visitor_ref"]."\">".$value["visitor_ref"]."</a>";
                           }
                         ?>
                         </td>

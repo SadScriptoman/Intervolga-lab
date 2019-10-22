@@ -25,6 +25,7 @@
             $page_url = (string)$_SERVER["PHP_SELF"];
             $visitor_ip = (string)$_SERVER["REMOTE_ADDR"];
             $visitor_ref = isset($_POST['referer']) ? trim($_POST['referer']) : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
+            //$visitor_ref = preg_replace('/(?:https?:\/\/)?(?:www\.)?(.*)\/?$/i', '$1', $visitor_ref);
             $str = $db->prepare("SELECT page_id FROM pages WHERE page_url = '$page_url'");
             $str->execute();
             $result = $str->fetch(PDO::FETCH_ASSOC);

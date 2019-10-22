@@ -1,4 +1,3 @@
-<!doctype html>
 <?php
     session_start();
     $connect = mysqli_connect('localhost', 'root', '');
@@ -7,6 +6,7 @@
         if (isset($_POST['login']) and isset($_POST['password'])) {
             $login = $_POST['login'];
             $password = mysqli_real_escape_string($connect, $_POST['password']);
+            $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index.php";
             $select = mysqli_query($connect, "SELECT * FROM users WHERE login = '$login' and password = '$password'");
             if (mysqli_num_rows($select) == 1) {
                 $_SESSION['login'] = $login;
@@ -16,11 +16,12 @@
                 $error_msg = "Неверный логин или пароль!";
             }
             if (isset($_SESSION['login']) && !isset($error_msg)) {
-                header("Location: main.php");
+                header("Location: ".$ref);
             }
         }
     }
 ?>
+<!doctype html>
 <html lang="ru">
     <head>
         <meta charset="utf-8">
