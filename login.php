@@ -1,22 +1,28 @@
 <?php
     session_start();
-    $connect = mysqli_connect('localhost', 'root', '');
-    mysqli_select_db($connect, 'lab');
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        if (isset($_POST['login']) and isset($_POST['password'])) {
-            $login = $_POST['login'];
-            $password = mysqli_real_escape_string($connect, $_POST['password']);
-            $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index.php";
-            $select = mysqli_query($connect, "SELECT * FROM users WHERE login = '$login' and password = '$password'");
-            if (mysqli_num_rows($select) == 1) {
-                $_SESSION['login'] = $login;
-                date_default_timezone_set('Europe/Samara');
-                $_SESSION['login_time'] = date('H:i:s', time());
-            } else {
-                $error_msg = "Неверный логин или пароль!";
-            }
-            if (isset($_SESSION['login']) && !isset($error_msg)) {
-                header("Location: ".$ref);
+    $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index.php";
+    if (!isset($_SESSION['login'])){
+        require_once("magic/db-connect.php");//подключение к бд через PDO
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            if (isset($_POST['login']) and isset($_POST['password'])) {
+                $login = $_POST['login'];
+                $password = $_POST['password'];
+                $str = $db->prepare("SELECT COUNT(*) FROM users WHERE login = '$login' and password = '$password'");
+                $str->execute() or die("<div class=\"alert container alert-danger mt-5 mb-5\" role=\"alert\">Не удалось проверить логин и пароль!</div>");
+                $result = $str->fetchColumn();
+                if ($result == 1) {
+                    $_SESSION['login'] = $login;
+                    date_default_timezone_set('Europe/Samara');
+                    $_SESSION['login_time'] = date('H:i:s', time());
+                } elseif ($result == 0) {
+                    $error_msg = "Неверный логин или пароль!";
+                }
+                else{
+                    $error_msg = "Произошла ошибка, пользователей с таким логином больше одного!";
+                }
+                if (isset($_SESSION['login']) && !isset($error_msg)) {
+                    header("Location: ".$ref);
+                }
             }
         }
     }
@@ -27,7 +33,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>Ресторан</title>
+        <title>Вход</title>
 
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="bootstrap/bootstrap.min.css" >
@@ -36,30 +42,22 @@
 
     <body class="text-center d-flex justify-content-center align-items-center flex-column">
 
-        <form class="form-signin" method="post" action="login.php">
-            <h1 class="h3 mb-3 font-weight-normal">Войдите</h1>
-            <label for="login" class="sr-only  mt-2">Логин</label>
-            <input type="text" name="login" id="login" class="form-control  mt-2" placeholder="Логин" required autofocus>
-            <label for="password" class="sr-only  mt-2">Пароль</label>
-            <input type="password" name="password" id="password" class="form-control mt-2" placeholder="Пароль" required>
-            <? if (isset($error_msg)){?>
-                <div class = "alert alert-danger  mt-2" role = "alert"> <?=$error_msg; ?></div>
-            <? }?>
-            <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Войти</button>
-        </form>
+        <? if (!isset($_SESSION['login'])):?>
 
-        <script src="jquery/jquery-3.4.1.min.js" ></script>
-        <script src="bootstrap/bootstrap.bundle.min.js" ></script>
-
-        <script type="text/javascript">
-            $(function(){
-                    $(".back-to-top").click(function(){
-                            var _href = $(this).attr("href");
-                            $("html, body").animate({scrollTop: $(_href).offset().top+"px"});
-                            return false;
-                    });
-            });
-        </script>
+            <form class="form-signin" method="post" action="login.php">
+                <h1 class="h3 mb-3 font-weight-normal">Войдите</h1>
+                <label for="login" class="sr-only  mt-2">Логин</label>
+                <input type="text" name="login" id="login" class="form-control  mt-2" placeholder="Логин" required autofocus>
+                <label for="password" class="sr-only  mt-2">Пароль</label>
+                <input type="password" name="password" id="password" class="form-control mt-2" placeholder="Пароль" required>
+                <button class="btn btn-primary btn-block mt-2" type="submit">Войти</button>
+                <? if (isset($error_msg)){?>
+                    <p class="mt-3 text-danger" > <?=$error_msg; ?></p>
+                <? }?>
+            </form>
+        <?else:
+            header("Location: ".$ref);
+        endif;?>
 
     </body>
     
