@@ -73,35 +73,32 @@
                                 <input type="tel" class="form-control" id="tel" name="tel" pattern="\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}" required>
                               </div>
                               <div class="invalid-feedback">
-                                Телефон введен неверно!
+                                Телефон введен неверно
                               </div>
                           </div>
                           <div class="form-group">
                               <label for="deposit">Депозит</label>
                               <input type="number" class="form-control" id="deposit" name="deposit" step=any pattern="\d+(\.\d*)?" min="0" value="0">
-                              <div class="invalid-feedback">
-                                Введите корректный депозит!
-                              </div>
                           </div>
                           <div class="form-group">
                             <label for="date">Дата</label>
-                            <input type="date" class="form-control datepicker" id="date" name="date" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}" min="<?=date('Y-m-d')?>" placeholder="Дата" required>
+                            <input type="date" class="form-control datepicker" id="date" name="date" pattern="(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d" min="<?=date('Y-m-d')?>" placeholder="Дата" required>
                             <div class="invalid-feedback">
-                              Дата введена неверно!
+                              Дата в формате дд.мм.гггг
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="time">Время</label>
-                            <input type="time" class="form-control" id="time" name="time" min="09:00" max="22:00" pattern="[0-9]{2}\:[0-9]{2}" required>
+                            <input type="time" class="form-control" id="time" name="time" min="09:00" max="22:00" pattern="^([0-1]\d|2[0-3])(:[0-5]\d)$" required>
                             <div class="invalid-feedback">
-                              Введите время с 9:00 до 22:00!
+                              Введите время с 09:00 до 22:00
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="table_number">Номер столика</label>
                             <input type="number" class="form-control" id="table_number" name="table_number" pattern="[0-9]{,2}" min="1" max="68" required>
                             <div class="invalid-feedback">
-                              Введите номер столика в диапозоне от 1 до 68!
+                              Введите номер столика в диапозоне от 1 до 68
                             </div>
                           </div>
                           <button type="submit" class="btn btn-primary mt-3" >Добавить</button>
