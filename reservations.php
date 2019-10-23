@@ -33,7 +33,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-                    <a href="magic/delete-old-reservations.php" class="btn btn-danger ml-3" >Удалить устаревшие бронирования</a>
+                    <a href="magic/delete-old-reservations" class="btn btn-danger ml-3" >Удалить устаревшие бронирования</a>
                   </div>
               </div>
               <? else:?>
