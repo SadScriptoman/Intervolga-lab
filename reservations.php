@@ -1,6 +1,6 @@
 <?php
   session_start();
-  setcookie("ref", $_SERVER['PHP_SELF']);
+  setcookie("ref", $_SERVER['REQUEST_URI']);
   if (isset($_SESSION['login'])){
     require_once("magic/db-connect.php");//подключение к бд через PDO
   }
@@ -56,7 +56,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                      <form action="magic/add-reservation.php" method="POST" class="needs-validation" novalidate>
+                      <form action="magic/add-reservation" method="POST" class="needs-validation" novalidate>
                           <div class="form-group">
                               <label for="name">Фамилия</label>
                               <input type="text" class="form-control" id="name" name="name" pattern="^[А-Яа-яЁёa-zA-Z]+$" maxlength="25" required >

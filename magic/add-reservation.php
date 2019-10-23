@@ -1,7 +1,7 @@
 <?
     session_start();
     if (isset($_SESSION['login'])){
-        $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index.php";
+        $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index";
         require_once("db-connect.php");//подключение к бд через PDO
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (isset($_POST['name']) && isset($_POST['tel']) && isset($_POST['date']) && isset($_POST['time']) && isset($_POST['table_number'])) {

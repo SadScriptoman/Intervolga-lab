@@ -1,6 +1,6 @@
 <?php
   session_start();
-  setcookie("ref", $_SERVER['PHP_SELF']);
+  setcookie("ref", $_SERVER['REQUEST_URI']);
   if (isset($_SESSION['login'])){
     require_once("magic/db-connect.php");//подключение к бд через PDO
   }

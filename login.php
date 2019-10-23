@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index.php";
+    $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index";
     if (!isset($_SESSION['login'])){
         require_once("magic/db-connect.php");//подключение к бд через PDO
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -44,7 +44,7 @@
 
         <? if (!isset($_SESSION['login'])):?>
 
-            <form class="form-signin" method="post" action="login.php">
+            <form class="form-signin" method="post" action="login">
                 <h1 class="h3 mb-3 font-weight-normal">Войдите</h1>
                 <label for="login" class="sr-only  mt-2">Логин</label>
                 <input type="text" name="login" id="login" class="form-control  mt-2" placeholder="Логин" required autofocus>

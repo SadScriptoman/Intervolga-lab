@@ -1,6 +1,6 @@
 <?php
   session_start();
-  setcookie("ref", $_SERVER['PHP_SELF']);
+  setcookie("ref", $_SERVER['REQUEST_URI']);
   require_once("magic/analytics.php");
   $page_title = "Рестораны";
   $nav_active = 3;

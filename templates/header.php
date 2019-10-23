@@ -24,30 +24,30 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item <? if ($nav_active == 1) echo "active"; ?>">
-              <a class="nav-link" href="index.php">Главная</a>
+              <a class="nav-link" href="index">Главная</a>
             </li>
             <li class="nav-item <? if ($nav_active == 2) echo "active"; ?>">
-              <a class="nav-link" href="menu.php">Меню</a>
+              <a class="nav-link" href="menu">Меню</a>
             </li>
             <li class="nav-item <? if ($nav_active == 3) echo "active"; ?>">
-                <a class="nav-link" href="map.php">Рестораны</a>
+                <a class="nav-link" href="map">Рестораны</a>
             </li>
             <? if (isset($_SESSION['login'])):?>
               <li class="nav-item <? if ($nav_active == 4) echo "active"; ?>">
-                  <a class="nav-link" href="reservations.php">Забронированные столики</a>
+                  <a class="nav-link" href="reservations">Забронированные столики</a>
               </li>
               <li class="nav-item <? if ($nav_active == 5) echo "active"; ?>">
-                  <a class="nav-link" href="admin.php">Аналитика</a>
+                  <a class="nav-link" href="admin">Аналитика</a>
               </li>
             <? endif;?>
           </ul>
           
           <? if (!isset($_SESSION['login'])):?>
             <span class="mr-3 d-block mb-2 mt-2" style="color: white;">09:00 - 23:00, ПН-ВС</span>
-            <a class="btn btn-outline-light" href="login.php">Войти в ЛК</a>
+            <a class="btn btn-outline-light" href="login">Войти в ЛК</a>
           <? else:?>
             <span class="mr-3 d-block mb-2 mt-2" style="color: white;">Вы вошли как: <?=$_SESSION['login']?>, в <?=$_SESSION['login_time']?> </span>
-            <a class="btn btn-outline-light" href="magic/logout.php">Выйти</a>
+            <a class="btn btn-outline-light" href="magic/logout">Выйти</a>
           <? endif;?>
         </div>
     </nav>
