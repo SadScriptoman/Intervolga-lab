@@ -18,7 +18,6 @@
                 $str->execute() or die("Произошла ошибка с отправкой данных в бд!");
             }
         }
-        //echo $_POST['name']."\n".preg_match('/^[А-Яа-яЁёa-zA-Z]{0,25}/', $_POST['name']);
         header("Location: ".$ref);
         
     }
