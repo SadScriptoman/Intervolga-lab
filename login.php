@@ -8,7 +8,7 @@
                 $login = $_POST['login'];
                 $password = $_POST['password'];
                 $str = $db->prepare("SELECT COUNT(*) FROM users WHERE login = '$login' and password = '$password'");
-                $str->execute() or die("<div class=\"alert container alert-danger mt-5 mb-5\" role=\"alert\">Не удалось проверить логин и пароль!</div>");
+                $str->execute() or die("<br><br><div class=\"alert container alert-danger mt-5 mb-5\" role=\"alert\">Не удалось проверить логин и пароль!</div>");
                 $result = $str->fetchColumn();
                 if ($result == 1) {
                     $_SESSION['login'] = $login;

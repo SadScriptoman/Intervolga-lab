@@ -59,9 +59,9 @@
                       <form action="magic/add-reservation" method="POST" class="needs-validation" novalidate>
                           <div class="form-group">
                               <label for="name">Фамилия</label>
-                              <input type="text" class="form-control" id="name" name="name" pattern="^[А-Яа-яЁёa-zA-Z]+$" maxlength="25" required >
+                              <input type="text" class="form-control" id="name" name="name" pattern="^[А-Яа-яЁёa-zA-Z]{0,25}" maxlength="25" required >
                               <div class="invalid-feedback">
-                                Вы должны ввести фамилию клиента!
+                                Вы должны ввести фамилию клиента! Максимум 25 символов
                               </div>
                           </div>
                           <div class="form-group">
@@ -70,7 +70,7 @@
                                 <div class="input-group-prepend">
                                   <div class="input-group-text">+7</div>
                                 </div>
-                                <input type="tel" class="form-control" id="tel" name="tel" pattern="\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}" required>
+                                <input type="tel" class="form-control" id="tel" name="tel" pattern="^\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}$" required>
                               </div>
                               <div class="invalid-feedback">
                                 Телефон введен неверно
@@ -82,9 +82,9 @@
                           </div>
                           <div class="form-group">
                             <label for="date">Дата</label>
-                            <input type="date" class="form-control datepicker" id="date" name="date" pattern="(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d" min="<?=date('Y-m-d')?>" placeholder="Дата" required>
+                            <input type="date" class="form-control datepicker" id="date" name="date" pattern="^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d$" min="<?=date('Y-m-d')?>" placeholder="Дата" required>
                             <div class="invalid-feedback">
-                              Дата в формате дд.мм.гггг
+                              Дата в формате дд.мм.гггг, начиная с сегодняшнего дня
                             </div>
                           </div>
                           <div class="form-group">
@@ -96,7 +96,7 @@
                           </div>
                           <div class="form-group">
                             <label for="table_number">Номер столика</label>
-                            <input type="number" class="form-control" id="table_number" name="table_number" pattern="[0-9]{,2}" min="1" max="68" required>
+                            <input type="number" class="form-control" id="table_number" name="table_number" pattern="^[1-9]$|^[1-5][0-9]$|^6[0-8]$" min="1" max="68" required>
                             <div class="invalid-feedback">
                               Введите номер столика в диапозоне от 1 до 68
                             </div>

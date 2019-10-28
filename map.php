@@ -1,9 +1,9 @@
 <?php
   session_start();
   setcookie("ref", $_SERVER['REQUEST_URI']);
-  require_once("magic/analytics.php");
   $page_title = "Рестораны";
   $nav_active = 3;
+  require_once("magic/analytics.php");
   require_once("templates/header.php");
 ?>
 

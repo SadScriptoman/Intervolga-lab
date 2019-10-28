@@ -22,10 +22,9 @@
     }
     if(!isBot()){
         if ($db){
-            $page_url = (string)$_SERVER["PHP_SELF"];
+            $page_url = (string)$_SERVER['REQUEST_URI'];
             $visitor_ip = (string)$_SERVER["REMOTE_ADDR"];
             $visitor_ref = isset($_POST['referer']) ? trim($_POST['referer']) : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
-            //$visitor_ref = preg_replace('/(?:https?:\/\/)?(?:www\.)?(.*)\/?$/i', '$1', $visitor_ref);
             $str = $db->prepare("SELECT page_id FROM pages WHERE page_url = '$page_url'");
             $str->execute();
             $result = $str->fetch(PDO::FETCH_ASSOC);
@@ -33,13 +32,13 @@
                 if($page_title)
                     $str = $db->prepare("INSERT INTO pages (page_url, page_title) VALUES ('$page_url', '$page_title')");
                 else
-                    $str = $db->prepare("INSERT INTO pages (page_url) VALUES ('$page_url')");
-                $str->execute() or die("Произошла ошибка с отправкой данных в таблицу pages!");
+                    $str = $db->prepare("INSERT INTO pages (page_url) VALUES ('$page_url')");                
+                $str->execute() or die('<br><br><div class="alert container alert-danger mt-5" role="alert">Произошла ошибка с отправкой данных в таблицу pages!</div>');
 
                 $str = $db->prepare("SELECT page_id FROM pages WHERE page_url = '$page_url'");
-                $str->execute() or die("Произошла ошибка c получением данных из таблицы pages!");
+                $str->execute() or die('<br><br><div class="alert container alert-danger mt-5" role="alert">Произошла ошибка с отправкой данных в таблицу pages!</div>');
                 $result = $str->fetch(PDO::FETCH_ASSOC);
-                if (isset($_SESSION['login'])) echo "<br><br>Страница добавлена в аналитику!";
+                if (isset($_SESSION['login'])) echo '<br><br><div class="alert container alert-success mt-5" role="alert">Страница добавлена в аналитику!</div>';
             }
             $page_id = (int)$result["page_id"];
 
