@@ -7,8 +7,9 @@
     <title><?=$page_title?></title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" >
-    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="stylesheet" href="core/src/bootstrap/bootstrap.min.css" >
+    <link rel="stylesheet" href="core/src/css/main.css">
+    <link rel="stylesheet" href="core/src/css/all.css"> 
 
 
   </head>
@@ -17,14 +18,14 @@
 
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="index.php"><h3>Ресторан</h3></a>
+        <a class="navbar-brand" href="main"><h3>Ресторан</h3></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item <? if ($nav_active == 1) echo "active"; ?>">
-              <a class="nav-link" href="index">Главная</a>
+              <a class="nav-link" href="main">Главная</a>
             </li>
             <li class="nav-item <? if ($nav_active == 2) echo "active"; ?>">
               <a class="nav-link" href="menu">Меню</a>
@@ -37,6 +38,9 @@
                   <a class="nav-link" href="reservations">Забронированные столики</a>
               </li>
               <li class="nav-item <? if ($nav_active == 5) echo "active"; ?>">
+                  <a class="nav-link" href="employees">Сотрудники</a>
+              </li>
+              <li class="nav-item <? if ($nav_active == 6) echo "active"; ?>">
                   <a class="nav-link" href="admin">Аналитика</a>
               </li>
             <? endif;?>
@@ -44,10 +48,10 @@
           
           <? if (!isset($_SESSION['login'])):?>
             <span class="mr-3 d-block mb-2 mt-2" style="color: white;">09:00 - 23:00, ПН-ВС</span>
-            <a class="btn btn-outline-light" href="login">Войти в ЛК</a>
+            <a class="btn btn-outline-light" href="login">Войти<i class="fas fa-sign-in-alt ml-2"></i></a>
           <? else:?>
             <span class="mr-3 d-block mb-2 mt-2" style="color: white;">Вы вошли как: <?=$_SESSION['login']?>, в <?=$_SESSION['login_time']?> </span>
-            <a class="btn btn-outline-light" href="magic/logout">Выйти</a>
+            <a class="btn btn-outline-light" href="core/magic/logout">Выйти<i class="fas fa-sign-out-alt ml-2"></i></a>
           <? endif;?>
         </div>
     </nav>

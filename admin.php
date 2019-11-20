@@ -1,12 +1,17 @@
 <?php
   session_start();
-  setcookie("ref", $_SERVER['REQUEST_URI']);
-  if (isset($_SESSION['login'])){
-    require_once("magic/db-connect.php");//подключение к бд через PDO
+  if (!isset($_SESSION['login'])){
+    header('HTTP/1.0 404 Not Found');
+    header('Status: 404 Not Found');
   }
-  $page_title = "Админ панель";
-  $nav_active = 5;
-  require_once("templates/header.php");
+  else{
+    $page_title = "Админ панель";
+    $nav_active = 6;
+    $fa = false;
+    setcookie("ref", $_SERVER['REQUEST_URI']);
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['DATABASE']['CONNECT']);
+    require_once($_CONFIG['TEMPLATES']['HEADER']);
 ?>
 
   <main role="main" id="main" style="min-height: 100vh" <? if (isset($_SESSION['login'])) echo "class=\"bg-dark\"";?>>
@@ -26,7 +31,8 @@
                 <th scope="col">Страница</th>
                 <th scope="col" class="text-center">Общее число посетителей</th>
                 <th scope="col" class="text-center">Уникальные</th>
-                <th scope="col" class="text-right">Переходили из</th>
+                <th scope="col" class="text-center">Переходили из</th>
+                <th scope="col" class="text-center">Действия</th>
               </tr>
             </thead>
             <tbody>
@@ -55,7 +61,7 @@
                         echo count($result);
                       ?>
                       </td>
-                      <td class="text-right" style="width: 25%; ">
+                      <td class="text-center" style="width: 25%; ">
                       <?
                         $str = $db->prepare("SELECT visitor_ref FROM analytics WHERE visited_page_id = $page_id");
                         $str->execute();
@@ -68,6 +74,9 @@
                         }
                       ?>
                       </td>
+                      <td class="text-center" style="width: 15%; ">
+                        <a title="Удалить" href="<?=$_CONFIG['ANALITYCS']['DEL']?>?id=<?=$page_id?>" class="text-white" rel="nofollow"><i class="far fa-trash-alt"></i></a>
+                      </td>
                   </tr>
               <?}?>
               
@@ -76,5 +85,6 @@
           <?endif;?>
       </div>
   </main> 
-  </body>
-</html>
+  <?
+  require_once($_CONFIG['TEMPLATES']['FOOTER_BOOTSTRAP']);
+}?>

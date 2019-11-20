@@ -1,9 +1,10 @@
 <?php
     session_start();
-    $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index";
     if (!isset($_SESSION['login'])){
-        require_once("magic/db-connect.php");//подключение к бд через PDO
+        require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+        require_once($_CONFIG['DATABASE']['CONNECT']);
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index";
             if (isset($_POST['login']) and isset($_POST['password'])) {
                 $login = $_POST['login'];
                 $password = $_POST['password'];
@@ -36,8 +37,8 @@
         <title>Вход</title>
 
         <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="bootstrap/bootstrap.min.css" >
-        <link rel="stylesheet" href="src/css/main.css">
+        <link rel="stylesheet" href="core/src/bootstrap/bootstrap.min.css" >
+        <link rel="stylesheet" href="core/src/css/main.css">
     </head>
 
     <body class="text-center d-flex justify-content-center align-items-center flex-column">
@@ -47,9 +48,9 @@
             <form class="form-signin" method="post" action="login">
                 <h1 class="h3 mb-3 font-weight-normal">Войдите</h1>
                 <label for="login" class="sr-only  mt-2">Логин</label>
-                <input type="text" name="login" id="login" class="form-control  mt-2" placeholder="Логин" required autofocus>
+                <input type="text" name="login" id="login" class="form-control  mt-2" placeholder="Логин" value="<?if (isset($_POST["login"])){echo $_POST["login"];}?>" required autofocus>
                 <label for="password" class="sr-only  mt-2">Пароль</label>
-                <input type="password" name="password" id="password" class="form-control mt-2" placeholder="Пароль" required>
+                <input type="password" name="password" id="password" class="form-control mt-2" placeholder="Пароль" value="<?if (isset($_POST["password"])){echo $_POST["password"];}?>" required>
                 <button class="btn btn-primary btn-block mt-2" type="submit">Войти</button>
                 <? if (isset($error_msg)){?>
                     <p class="mt-3 text-danger" > <?=$error_msg; ?></p>

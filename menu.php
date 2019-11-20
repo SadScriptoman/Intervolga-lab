@@ -1,10 +1,12 @@
 <?php
-    session_start();
-    setcookie("ref", $_SERVER['REQUEST_URI']);
     $page_title = "Меню";
     $nav_active = 2;
-    require_once("magic/analytics.php");
-    require_once("templates/header.php");
+    $fa = false;
+    session_start();
+    setcookie("ref", $_SERVER['REQUEST_URI']);
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['ANALITYCS']['FULL_PATH_TO_MODULE']);
+    require_once($_CONFIG['TEMPLATES']['HEADER']);
 ?>
 
 <main role="main" id="main">
@@ -166,5 +168,6 @@
 
 </main>
 
-</body>
-</html>
+<?
+  require_once($_CONFIG['TEMPLATES']['FOOTER_BOOTSTRAP']);
+?>

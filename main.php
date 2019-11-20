@@ -1,10 +1,12 @@
 <?php
-  session_start();
-  setcookie("ref", $_SERVER['REQUEST_URI']);
   $page_title = "Главная";
   $nav_active = 1;
-  require_once("magic/analytics.php");
-  require_once("templates/header.php");
+  $fa = false;
+  session_start();
+  setcookie("ref", $_SERVER['REQUEST_URI']);
+  require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+  require_once($_CONFIG['ANALITYCS']['FULL_PATH_TO_MODULE']);
+  require_once($_CONFIG['TEMPLATES']['HEADER']);
 ?>
 
 <main role="main" id="main">
@@ -16,7 +18,7 @@
         <li data-target="#myCarousel" data-slide-to="2"></li>
       </ol>
       <div class="carousel-inner">
-        <div class="carousel-item active" style="background-image: url('src/img/main1.jpg'); background-size: cover; background-position: 50% 50%;">
+        <div class="carousel-item active" style="background-image: url('core/src/img/main1.jpg'); background-size: cover; background-position: 50% 50%;">
           <svg style="opacity: 0.4;" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" ><rect fill="#777" width="100%" height="100%"/></svg>
           <div class="container">
           <div class="carousel-caption d-flex justify-content-center align-items-center flex-column">
@@ -26,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div class="carousel-item" style="background-image: url('src/img/main2.jpg'); background-size: cover; background-position: 50% 50%;">
+        <div class="carousel-item" style="background-image: url('core/src/img/main2.jpg'); background-size: cover; background-position: 50% 50%;">
           <svg style="opacity: 0.4;" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" ><rect fill="#777" width="100%" height="100%"/></svg>
           <div class="container">
             <div class="carousel-caption d-flex justify-content-center align-items-center flex-column">
@@ -36,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="carousel-item" style="background-image: url('src/img/main3.jpg'); background-size: cover; background-position: 50% 50%;">
+        <div class="carousel-item" style="background-image: url('core/src/img/main3.jpg'); background-size: cover; background-position: 50% 50%;">
           <svg style="opacity: 0.4;" class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" ><rect fill="#777" width="100%" height="100%"/></svg>
           <div class="container">
           <div class="carousel-caption d-flex justify-content-center align-items-center flex-column">
@@ -70,7 +72,7 @@
             <h2 class="featurette-heading">Замечательное место<br><small class="text-muted">В центре города!</small></h2>
             <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
           </div>
-          <div class="col-md-5 mt-5" style="background-image: url('src/img/main4.jpg'); 
+          <div class="col-md-5 mt-5" style="background-image: url('core/src/img/main4.jpg'); 
           background-size: cover; 
           background-position: 0% 50%; 
           width: 500px;
@@ -85,7 +87,7 @@
             <h2 class="featurette-heading">Уютный интерьер<br><small class="text-muted">и професиональные официанты</small></h2>
             <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
           </div>
-          <div class="col-md-5" style="background-image: url('src/img/main5.jpg'); 
+          <div class="col-md-5" style="background-image: url('core/src/img/main5.jpg'); 
           background-size: cover; 
           background-position: 50% 50%; 
           width: 500px;
@@ -100,7 +102,7 @@
             <h2 class="featurette-heading">И конечно же вкуснейшие итальянские блюда!</h2>
             <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
           </div>
-          <div class="col-md-5" style="background-image: url('src/img/main1.jpg'); 
+          <div class="col-md-5" style="background-image: url('core/src/img/main1.jpg'); 
           background-size: cover; 
           background-position: 50% 50%; 
           width: 500px;
@@ -117,7 +119,6 @@
       <p>&copy; 2017-2018 Ресторан &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
     </footer>
 
-</main>
-
-</body>
-</html>
+<?
+  require_once($_CONFIG['TEMPLATES']['FOOTER_BOOTSTRAP']);
+?>

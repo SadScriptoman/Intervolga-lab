@@ -1,5 +1,6 @@
 <?
-    require_once("db-connect.php");//подключение к бд через PDO
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['DATABASE']['CONNECT']);
     function isBot(&$botname = ''){
         /* Эта функция будет проверять, является ли посетитель роботом поисковой системы */
         $bots = array(
