@@ -45,7 +45,10 @@
         }
 
         $("input[type='file']#image").change(function(e){
-          $("#photo_preview").css({"width" : "auto"}); 
+          $("#photo_preview").css({
+            "width" : "auto",
+            "margin-right" : "1rem"
+          }); 
           var photo = $("#photo_preview #photo");
           if (photo.length == 0){
             $("#photo_preview").append('<img id="photo" width="<?=$_CONFIG['EMPLOYEES']["IMAGE_W"]?>" height="<?=$_CONFIG['EMPLOYEES']["IMAGE_H"]?>" src="'+URL.createObjectURL(event.target.files[0])+'" alt="Preview">');

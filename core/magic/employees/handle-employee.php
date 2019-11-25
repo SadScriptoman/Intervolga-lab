@@ -8,16 +8,19 @@
 
         $ext = array('image/png'=>'.png', 'image/jpeg'=>'.jpg');
         $id = isset($_POST['id']) ? $_POST['id'] : FALSE;
-        $check_name = (bool) preg_match('/^[A-яёЁA-z\s]{3,100}$/i', $_POST['name']);
+        
+        $check_name = (bool) preg_match('/^[а-яёa-z\s]{3,100}$/iu', $_POST['name']);
         $check_tel = (bool) preg_match('/^\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}$/', $_POST['tel']);
-        $check_post = (bool) preg_match('/^[A-яёЁ\s]{3,30}$/i', $_POST['post']);
+        $check_post = (bool) preg_match('/^[а-яё\s]{3,30}$/iu', $_POST['post']);
         $check_image = (bool) array_key_exists($_FILES["image"]["type"], $ext);
+        
         $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".'?name='.$_POST['name'].'&tel='.$_POST['tel'].'&post='.$_POST['post'];
-        if ($id) {
-            $ref_w_get = $ref_w_get . "&state=1";
+        
+        if ($id) {//если передан id, то в случае возврата на страницу сотрудников откроется форма редактирования потому что state=1
+            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".'?id='.$id."&state=1";
         }
-        else{
-            $ref_w_get = $ref_w_get . "&state=0";
+        else{//если нет, то откроется форма добавления (state=0)
+            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".'?name='.$_POST['name'].'&tel='.$_POST['tel'].'&post='.$_POST['post'].'&state=0';
         }
         $ref = 'http://'.$_SERVER["SERVER_NAME"]."/employees";
 

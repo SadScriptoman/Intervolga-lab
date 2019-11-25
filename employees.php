@@ -105,7 +105,7 @@
                       </div>
                       <div class="form-group">
                         <label for="post">Должность</label>
-                        <input type="text" class="form-control" id="post" name="post" pattern="^[A-яёЁ\s]{3,30}$" value="<?=$post?>" minlength="3" maxlength="30" required>
+                        <input type="text" class="form-control" autocomplete="off" id="post" name="post" pattern="^[A-яёЁ\s]{3,30}$" value="<?=$post?>" minlength="3" maxlength="30" required>
                         <div class="invalid-feedback">
                           Введите должность русскими буквами
                         </div>
@@ -113,11 +113,11 @@
                       
                       <div class="d-flex justify-content-between align-items-end">
                         <?if($image_name):?>
-                          <div id="photo_preview" class="mt-2 mr-3" style="width=auto">
+                          <div id="photo_preview" class="mt-2" style="width=auto; margin-right:1rem">
                             <img id="photo" width="<?=$_CONFIG['EMPLOYEES']["IMAGE_W"]?>" height="<?=$_CONFIG['EMPLOYEES']["IMAGE_H"]?>" src="<?=$_CONFIG['EMPLOYEES']["PATH_TO_PHOTOS"].$image_name?>" alt="Preview">
                           </div>
                         <?else:?>
-                          <div id="photo_preview" class="mt-2 mr-3" style="width=0%">
+                          <div id="photo_preview" class="mt-2" style="width=0% ">
                           </div>
                         <?endif;?>
                         <div class="custom-file mb-0 h-100">

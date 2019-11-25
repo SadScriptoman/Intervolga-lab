@@ -5,7 +5,7 @@
         require_once($_CONFIG['DATABASE']['CONNECT']);
 
         $id = isset($_POST['id']) ? $_POST['id'] : FALSE;
-        $check_name = (bool) preg_match('/^[A-яёЁA-z\s]{3,25}$/i', $_POST['name']);
+        $check_name = (bool) preg_match('/^[а-яёa-z\s]{3,25}$/iu', $_POST['name']);
         $check_tel = (bool) preg_match('/^\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}$/', $_POST['tel']);
         $check_date = (bool) preg_match('/^(19|20)\d\d\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/', $_POST['date']);
         $check_time = (bool) preg_match('/^([0-1]\d|2[0-3])(:[0-5]\d)(:\d\d)?$/', $_POST['time']);

@@ -161,7 +161,7 @@
                     </div>
                     <div class="form-group">
                       <label for="date">Дата</label>
-                      <input type="date" class="form-control datepicker" id="date" name="date" pattern="^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d$" <? if (!$id) echo "min=\"<?=date('Y-m-d')?>\""?> value="<?=$date?>" placeholder="Дата" required>
+                      <input type="date" class="form-control datepicker" id="date" name="date" pattern="^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d$" <? if (!$id) echo "min=\"".date('Y-m-d')."\""?> value="<?=$date?>" placeholder="Дата" required>
                       <div class="invalid-feedback">
                         Дата в формате дд.мм.гггг, начиная с сегодняшнего дня
                       </div>
