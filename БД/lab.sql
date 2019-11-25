@@ -7,7 +7,7 @@ CREATE TABLE `analytics` (
   `visited_this_page` int(11) NOT NULL DEFAULT 0,
   `visitor_ref` text NOT NULL,
   PRIMARY KEY (`visitor_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO analytics VALUES
@@ -26,14 +26,16 @@ INSERT INTO analytics VALUES
 ("55","::1","34","9","http://localhost/main"),
 ("56","::1","35","5","http://localhost/menu"),
 ("57","::1","36","6",""),
-("58","::1","37","10","http://localhost/admin"),
+("58","::1","37","11","http://localhost/admin"),
 ("59","::1","38","2","http://localhost/main"),
 ("60","::1","39","1","http://localhost/menu"),
 ("61","::1","40","4","http://localhost/main"),
 ("62","::1","41","10","http://localhost/menu"),
 ("63","::1","42","1",""),
 ("64","::1","43","6",""),
-("65","::1","44","4","");
+("65","::1","44","4",""),
+("66","::1","45","2","https://www.yandex.ru/clck/jsredir?from=yandex.ru;suggest;browser&text="),
+("67","::1","46","4","");
 
 
 
@@ -45,12 +47,13 @@ CREATE TABLE `employees` (
   `e_post` varchar(30) DEFAULT NULL,
   `e_photo` varchar(100) DEFAULT '././uploads/employes',
   PRIMARY KEY (`e_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO employees VALUES
 ("146","Соколов Никита Дмитриевич","+7 (917) 842-43-66","Официант","sokolov-nikita-dmitrievich-sbmj3.jpg"),
-("155","Силеверстова Марина Евгеньевна","+7 (917) 842-43-66","Официант","sokolov-nikita-dmitrie-pobjk.jpg");
+("155","Силеверстова Марина Евгеньевна","+7 (917) 842-43-66","Официант","sokolov-nikita-dmitrie-pobjk.jpg"),
+("157","Соколов Никита Андреевич","+7 (917) 842-43-66","Старший Официант","sokolov-nikita-dmitrievich-ztkjb.jpg");
 
 
 
@@ -60,13 +63,14 @@ CREATE TABLE `pages` (
   `page_url` varchar(60) NOT NULL,
   `page_title` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`page_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO pages VALUES
 ("37","/main","Главная"),
 ("40","/menu","Меню"),
-("41","/map","Рестораны");
+("41","/map","Рестораны"),
+("46","/","Главная");
 
 
 
@@ -80,13 +84,12 @@ CREATE TABLE `reservations` (
   `name` varchar(60) DEFAULT NULL,
   `table_number` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`reservation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO reservations VALUES
-("53","2019-11-18","20:00:00","+7 (917) 842-43-66","100000","Соколов","22"),
-("54","2019-11-18","09:09:00","+7 (917) 842-43-66","0","Соколов","33"),
-("55","2019-11-18","20:00:00","+7 (917) 842-43-66","1000","Соколов","22");
+("56","2019-11-25","09:00:00","+7 (917) 842-43-66","0","Соколов","22"),
+("57","2019-11-25","09:00:00","+7 (917) 842-43-66","0","Соколов","22");
 
 
 
