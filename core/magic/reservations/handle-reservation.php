@@ -28,7 +28,7 @@
             $table_number = $_POST['table_number'];
             $deposit = isset($_POST['deposit']) ? $_POST['deposit']:NULL;
             if ($id){
-                $str = $db->prepare("UPDATE reservations SET name = '$name', telephone = '$tel', deposit = '$deposit', time = '$time', table_number = '$table_number' WHERE reservation_id = $id");
+                $str = $db->prepare("UPDATE reservations SET name = '$name', telephone = '$tel', deposit = '$deposit', date = '$date', time = '$time', table_number = '$table_number' WHERE reservation_id = $id");
             }else{
                 $str = $db->prepare("INSERT INTO reservations (name, telephone, deposit, date, time, table_number) VALUES ('$name', '$tel', '$deposit', '$date', '$time', '$table_number')");
             }

@@ -1,4 +1,5 @@
 <?php
+  if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
   session_start();
   if (!isset($_SESSION['login'])){
     header('HTTP/1.0 404 Not Found');
@@ -8,10 +9,12 @@
     $page_title = "Сотрудники";
     $nav_active = 5;
     $fa = true;
+    $ref = isset($_COOKIE['ref']) ? preg_replace('/search=.*/','',$_COOKIE['ref']): 'reservations';
     setcookie("ref", $_SERVER['REQUEST_URI']);
     require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
     require_once($_CONFIG['DATABASE']['CONNECT']);
     require_once($_CONFIG['TEMPLATES']['HEADER']);
+    require_once($_CONFIG['FUNCTIONS_PATH']. 'weight-sort.php');
     $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
     $state = isset($_GET["state"]) ? $_GET["state"] : -1;
     $name = NULL;
@@ -33,7 +36,12 @@
     $tel = isset($_GET["tel"]) ? $_GET["tel"] : $tel;
     $post = isset($_GET["post"]) ? $_GET["post"] : $post;
     $image_name = isset($_GET["image_name"]) ? $_GET["image_name"] : $image_name;
-
+    $search = isset($_GET["search"]) ? $_GET["search"] : NULL;
+    if ($search){
+      $search_unscaped = preg_replace("/[()\-\+]/", '', $search);
+      $search_query = '/('.preg_replace("/\s/", ')|(', $search_unscaped).')/iu';
+      $search_tel = '/'.preg_replace("/^[78]/", '', $search_unscaped).'/iu';
+    }
 ?>
 
   <main role="main" id="main">
@@ -138,8 +146,21 @@
               </div>
           </div>
         </div>
-        <button type="button" class="btn btn-sm btn-success mb-3" data-toggle="modal" data-target="#handlerModal"><i class="fas fa-user mr-2"></i>Добавить сотрудника</button>
-        <table class="w-100 table">
+
+        <div class="mb-3 d-flex justify-content-between">
+          <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#handlerModal"><i class="fas fa-user mr-2"></i>Добавить сотрудника</button>
+          <div>
+            <?if($search):?>
+              <a href="<?=$ref?>" class="btn btn-sm btn-outline-secondary mr-2">Сбросить</a>
+            <?endif;?>
+            <form class="form-inline d-inline" id="search-form" action="" method="GET" novalidate>
+              <input class="form-control form-control-sm mr-2" type="search" name="search" id="search" placeholder="Поиск сотрудника" aria-label="Поиск" value="<?=$search?>" <? if(!$search) echo("required")?>>
+              <button class="btn btn-sm btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+          </div>
+        </div>
+        
+        <table class="w-100 table employees-table">
           <thead>
             <tr>
                 <th>ФИО</th>
@@ -149,13 +170,57 @@
                 <th class="text-center">Действия</th>
             </tr>
           </thead>
-          </tbody>
+          <tbody>
             <?
-                if ($db):
-                  $result = $db->query("SELECT * FROM employees");
-                  foreach($result as $result_value):?>
+              if ($db){
+                $str = $db->prepare("SELECT * FROM employees");
+                if ($str->execute()) {
+                  $result = $str->fetchAll();
+                  $weight = [];
+                  $employees = [];
+                  $full_match = false;
+                  foreach($result as $key => $result_value){
+                    if($search){
+                      $name_out = [[]];
+                      $post_out = [[]];
+                      $tel_out = [[]];     
+                      $tel_unscaped = preg_replace("/^\+?[78]/", '', $result_value['e_tel']);
+                      $tel_unscaped = preg_replace("/[()\-\+\s]/", '', $tel_unscaped);
+                      if ((preg_match_all($search_query, $result_value['e_name'], $name_out) || preg_match_all($search_query, $result_value['e_post'], $post_out) || preg_match_all($search_tel, $tel_unscaped, $tel_out)) && (!$full_match)){
+                        if ($result_value['e_name'] == $search){
+                          $employees = [];
+                          $full_match = true;
+                        }
+                        $employees[$key]["weight"] = 1+count($name_out[0])+count($post_out[0])+count($tel_out[0]);
+                        $employees[$key]["e_name"] = $result_value['e_name'];
+                        $employees[$key]["e_tel"] = $result_value['e_tel'];
+                        $employees[$key]["e_post"] = $result_value['e_post'];
+                        $employees[$key]["e_id"] = $result_value['e_id'];
+                        $employees[$key]["e_photo"] = $result_value['e_photo'];
+                      }
+                    }else{?>
                       <tr>
-                          <td><?=$result_value['e_name']?></td>
+                        <td><?=$result_value['e_name']?> </td>
+                        <td class="text-center">
+                          <img width="<?=$_CONFIG['EMPLOYEES']['IMAGE_W']?>" height="<?=$_CONFIG['EMPLOYEES']['IMAGE_H']?>" src="<?=$_CONFIG['EMPLOYEES']['PATH_TO_PHOTOS'].$result_value['e_photo']?>">
+                        </td>
+                        <td class="text-center"><?=$result_value['e_tel']?></td>
+                        <td class="text-center"><?=$result_value['e_post']?></td>
+                        <td class="text-center">
+                          <a title="Редактировать" href="employees?id=<?=$result_value['e_id']?>&state=1" class="text-muted mr-2" rel="nofollow"><i class="fas fa-edit"></i></a>
+                          <a title="Дублировать" href="<?=$_CONFIG['EMPLOYEES']['CPY']?>?id=<?=$result_value['e_id']?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
+                          <a title="Удалить" href="employees?id=<?=$result_value['e_id']?>&state=2" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                      </tr>
+                    <?}
+                  }
+
+                  if ($search){
+                    if(count($employees)>0){
+                      usort ( $employees, 'weight_sort' );
+                      foreach($employees as $result_value){?>
+                        <tr>
+                          <td><?=$result_value['e_name']?> </td>
                           <td class="text-center">
                             <img width="<?=$_CONFIG['EMPLOYEES']['IMAGE_W']?>" height="<?=$_CONFIG['EMPLOYEES']['IMAGE_H']?>" src="<?=$_CONFIG['EMPLOYEES']['PATH_TO_PHOTOS'].$result_value['e_photo']?>">
                           </td>
@@ -166,10 +231,21 @@
                             <a title="Дублировать" href="<?=$_CONFIG['EMPLOYEES']['CPY']?>?id=<?=$result_value['e_id']?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
                             <a title="Удалить" href="employees?id=<?=$result_value['e_id']?>&state=2" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
                           </td>
-                      </tr>
-                  <?endforeach;
-                endif;?>
-            </tbody>
+                        </tr>
+                      <?}
+                    }else{?>
+                        </tbody>
+                      </table>
+                      <h4 class="text-center mt-5">
+                        По вашему запросу ничего не найдено!<br>
+                        <i class="fas fa-dizzy mt-5" style="font-size:256px"></i>
+                      </h4>
+                    <?}
+                  }
+                }
+              }
+            ?>
+          </tbody>
         </table>
       <? endif;?>
     </div>

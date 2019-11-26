@@ -1,4 +1,5 @@
 <?php
+  if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
   session_start();
   if (!isset($_SESSION['login'])){
     header('HTTP/1.0 404 Not Found');
@@ -8,11 +9,14 @@
     $page_title = "Забронированные столики";
     $nav_active = 4;
     $fa = false;
+    $ref = isset($_COOKIE['ref']) ? preg_replace('/search=.*/','',$_COOKIE['ref']): 'reservations';
     setcookie("ref", $_SERVER['REQUEST_URI']);
 
     require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
     require_once($_CONFIG['DATABASE']['CONNECT']);
     require_once($_CONFIG['TEMPLATES']['HEADER']);
+    require_once($_CONFIG['FUNCTIONS_PATH']. 'weight-sort.php');
+
     $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
     $name = isset($_GET["name"]) ? $_GET["name"] : NULL;
     $tel = isset($_GET["tel"]) ? $_GET["tel"] : NULL;
@@ -53,6 +57,12 @@
     $time = isset($_GET["time"]) ? $_GET["time"] : $time;
     $table_number = isset($_GET["table_number"]) ? $_GET["table_number"] : $table_number;
     $deposit = isset($_GET["deposit"]) ? $_GET["deposit"] : $deposit;
+    $search = isset($_GET["search"]) ? preg_replace("/[()-+]/", '', $_GET["search"]) : NULL;
+    if ($search){
+      $search_unscaped = preg_replace("/[()\-\+]/", '', $search);
+      $search_query = '('.preg_replace("/\s/", ')|(', $search_unscaped).')';
+      $search_tel = preg_replace("/^[78]/", '', $search_unscaped);
+    }
 ?>
 
 <main role="main" id="main">
@@ -128,7 +138,7 @@
           <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalLabel"><?=$id?"Редактировать сотрудника":"Добавить сотрудника"?></h5>
+                  <h5 class="modal-title" id="modalLabel"><?=$id?"Редактировать бронирование":"Добавить бронирование"?></h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -189,12 +199,26 @@
               </div>
           </div>
         </div>
-        <button type="button" class="btn btn-sm btn-success mb-3" data-toggle="modal" data-target="#handlerModal"><i class="fas fa-plus mr-2"></i>Добавить</button>
-        <button type="button" class="btn btn-sm btn-secondary text-white ml-2 mb-3" data-toggle="modal" data-target="#oldTables"><i class="fas fa-sync mr-2"></i>Удалить старые</button>
-        <table class="w-100 table">
+
+        <div class="mb-3 d-flex justify-content-between">
+          <div>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#handlerModal"><i class="fas fa-plus mr-2"></i>Добавить</button>
+            <button type="button" class="btn btn-sm btn-secondary text-white ml-2" data-toggle="modal" data-target="#oldTables"><i class="fas fa-sync mr-2"></i>Удалить старые</button>
+          </div>
+          <div>
+            <?if($search):?>
+              <a href="<?=$ref?>" class="btn btn-sm btn-outline-secondary mr-2">Сбросить</a>
+            <?endif;?>
+            <form class="form-inline d-inline" id="search-form" action="" method="GET" novalidate>
+              <input class="form-control form-control-sm mr-2" type="search" name="search" id="search" placeholder="Поиск брони" aria-label="Поиск" value="<?=$search?>" <? if(!$search) echo("required")?> >
+              <button class="btn btn-sm btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+          </div>
+        </div>
+        <table class="w-100 table reservations-table">
           <thead>
             <tr>
-                <th>Номер столика</th>
+                <th>Столик, №</th>
                 <th class="text-center">Фамилия</th>
                 <th class="text-center">Телефон</th>
                 <th class="text-center">Депозит</th>
@@ -204,11 +228,58 @@
             </tr>
           </thead>
           </tbody>
-            <?
-                if ($db):
-                  $result = $db->query("SELECT * FROM reservations");
-                  foreach($result as $result_value):?>
+          <?
+              if ($db){
+                $str = $db->prepare("SELECT * FROM reservations");
+                if ($str->execute()) {
+                  $result = $str->fetchAll();
+                  $weight = [];
+                  $reservations = [];
+                  foreach($result as $key => $result_value){
+                    if($search){
+                      $name_out = [[]];
+                      $date_out = [[]];
+                      $time_out = [[]]; 
+                      $tel_out = [[]];
+                      $table_number_out = [[]];
+                      $tel_unscaped = preg_replace("/^\+?[78]/", '', $result_value['telephone']);
+                      $tel_unscaped = preg_replace("/[()\-\+\s]/", '', $tel_unscaped);
+                      if (preg_match_all('/'.$search_query.'/iu', $result_value['name'], $name_out) 
+                      || preg_match_all('/'.$search_query.'/iu', date('d.m.Y', strtotime($result_value['date'])), $date_out) 
+                      || preg_match_all('/'.$search_query.'/iu', $result_value['time'], $time_out)
+                      || preg_match_all('/'.$search_tel.'/iu', $tel_unscaped, $tel_out)
+                      || preg_match_all('/^'.$search_query.'$/iu', $result_value['table_number'], $table_number_out)){
+                        $reservations[$key]["weight"] = 1+count($name_out[0])+count($date_out[0])+count($time_out[0])+count($tel_out[0])+count($table_number_out[0]);
+                        $reservations[$key]["table_number"] = $result_value['table_number'];
+                        $reservations[$key]["name"] = $result_value['name'];
+                        $reservations[$key]["deposit"] = $result_value['deposit'];
+                        $reservations[$key]["date"] = $result_value['date'];
+                        $reservations[$key]["time"] = $result_value['time'];
+                        $reservations[$key]["telephone"] = $result_value['telephone'];
+                        $reservations[$key]["reservation_id"] = $result_value['reservation_id'];
+                      }
+                    }else{?>
                       <tr>
+                        <td><?=$result_value['table_number']?></td>
+                        <td class="text-center"><?=$result_value['name']?></td>
+                        <td class="text-center"><?=$result_value['telephone']?></td>
+                        <td class="text-center"><?=$result_value['deposit']?></td>
+                        <td class="text-center"><?=date('d.m.Y', strtotime($result_value['date']))?></td>
+                        <td class="text-center"><?=$result_value['time']?></td>
+                        <td class="text-center">
+                          <a title="Редактировать" href="reservations?id=<?=$result_value['reservation_id']?>&state=1" class="text-muted mr-2" rel="nofollow"><i class="fas fa-edit"></i></a>
+                          <a title="Дублировать" href="<?=$_CONFIG['RESERVATIONS']['CPY']?>?id=<?=$result_value['reservation_id']?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
+                          <a title="Удалить" href="reservations?id=<?=$result_value['reservation_id']?>&state=2" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
+                        </td>
+                      </tr>
+                    <?}
+                  }
+
+                  if ($search){
+                    if(count($reservations)>0){
+                      usort ( $reservations, 'weight_sort' );
+                      foreach($reservations as $result_value){?>
+                        <tr>
                           <td><?=$result_value['table_number']?></td>
                           <td class="text-center"><?=$result_value['name']?></td>
                           <td class="text-center"><?=$result_value['telephone']?></td>
@@ -220,9 +291,20 @@
                             <a title="Дублировать" href="<?=$_CONFIG['RESERVATIONS']['CPY']?>?id=<?=$result_value['reservation_id']?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
                             <a title="Удалить" href="reservations?id=<?=$result_value['reservation_id']?>&state=2" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
                           </td>
-                      </tr>
-                  <?endforeach;
-                endif;?>
+                        </tr>
+                      <?}
+                    }else{?>
+                        </tbody>
+                      </table>
+                      <h4 class="text-center mt-5">
+                        По вашему запросу ничего не найдено!<br>
+                        <i class="fas fa-dizzy mt-5" style="font-size:256px"></i>
+                      </h4>
+                    <?}
+                  }
+                }
+              }
+            ?>
             </tbody>
         </table>
         <? endif;?>

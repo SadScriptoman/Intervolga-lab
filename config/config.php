@@ -15,6 +15,7 @@
             'FOOTER_ALL_SCRIPTS' => $_SERVER['DOCUMENT_ROOT'] . '/core/templates/footer-all-scripts.php',
             'FOOTER_BOOTSTRAP' => $_SERVER['DOCUMENT_ROOT'] . '/core/templates/footer-bootstrap-scripts.php',
             'FOOTER_CRUD' => $_SERVER['DOCUMENT_ROOT'] . '/core/templates/footer-crud.php',
+            'FOOTER_REG' => $_SERVER['DOCUMENT_ROOT'] . '/core/templates/footer-registration.php',
         ],
         'ANALITYCS' => [
             'MODULE_FOLDER' => $_SERVER['DOCUMENT_ROOT'] . '/core/magic/analitycs',

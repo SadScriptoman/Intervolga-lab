@@ -1,4 +1,5 @@
 <?php 
+    if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
     session_start();
     if (isset($_SESSION['login'])){
         require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");

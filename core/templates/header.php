@@ -8,7 +8,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="core/src/bootstrap/bootstrap.min.css" >
-    <link rel="stylesheet" href="core/src/css/main.css">
+    <link rel="stylesheet" href="core/src/css/main.css?v=1.111">
     <link rel="stylesheet" href="core/src/css/all.css"> 
 
 
@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item <? if ($nav_active == 1) echo "active"; ?>">
-              <a class="nav-link" href="main">Главная</a>
+              <a class="nav-link" href="/">Главная</a>
             </li>
             <li class="nav-item <? if ($nav_active == 2) echo "active"; ?>">
               <a class="nav-link" href="menu">Меню</a>
@@ -51,8 +51,27 @@
             <a class="btn btn-outline-light" href="login">Войти<i class="fas fa-sign-in-alt ml-2"></i></a>
           <? else:?>
             <span class="mr-3 d-block mb-2 mt-2" style="color: white;">Вы вошли как: <?=$_SESSION['login']?>, в <?=$_SESSION['login_time']?> </span>
-            <a class="btn btn-outline-light" href="core/magic/logout">Выйти<i class="fas fa-sign-out-alt ml-2"></i></a>
+            <button class="btn btn-outline-light" data-toggle="modal" data-target="#logoutModal">Выйти<i class="fas fa-sign-out-alt ml-2"></i></button>
           <? endif;?>
         </div>
     </nav>
 </header>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Вы точно хотите выйти?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>После этого вам снова нужно будет войти в аккаунт!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+        <a title="Выйти" href="core/magic/logout" class="btn btn-primary" rel="nofollow">Выйти</a>
+      </div>
+    </div>
+  </div>
+</div>

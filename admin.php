@@ -1,4 +1,5 @@
 <?php
+  if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
   session_start();
   if (!isset($_SESSION['login'])){
     header('HTTP/1.0 404 Not Found');

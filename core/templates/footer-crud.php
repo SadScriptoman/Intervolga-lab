@@ -22,13 +22,21 @@
           }, false);
         });
 
-        var vars = [], hash;
+        var search = document.getElementById('search-form');
+        search.addEventListener('submit', function(event) {
+          if (search.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        }, false);
+
+        var vars = [];
         var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
         for(var i = 0; i < hashes.length; i++)
         {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
+          var hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
         }
         if (vars["state"] == 0){
           $('#handlerModal').modal('show');
