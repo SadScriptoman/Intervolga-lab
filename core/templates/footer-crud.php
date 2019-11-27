@@ -32,23 +32,27 @@
 
         var vars = [];
         var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        var search = '';
         for(var i = 0; i < hashes.length; i++)
         {
           var hash = hashes[i].split('=');
           vars.push(hash[0]);
           vars[hash[0]] = hash[1];
+          if (vars['search']){
+            search = '?search='+vars['search'];
+          }
         }
         if (vars["state"] == 0){
           $('#handlerModal').modal('show');
         }else if (vars["state"] == 1){
           $('#handlerModal').modal('show');
           $('#handlerModal').on('hidden.bs.modal', function (e) {
-            window.location.href = window.location.origin + window.location.pathname;
+            window.location.href = window.location.origin + window.location.pathname + search;
           });
         }else if (vars["state"] == 2){
           $('#deleteModal').modal('show');
           $('#deleteModal').on('hidden.bs.modal', function (e) {
-              window.location.href = window.location.origin + window.location.pathname;
+              window.location.href = window.location.origin + window.location.pathname + search;
           });
         }
 

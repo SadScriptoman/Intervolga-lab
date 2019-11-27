@@ -8,21 +8,21 @@
 
         $ext = array('image/png'=>'.png', 'image/jpeg'=>'.jpg');
         $id = isset($_POST['id']) ? $_POST['id'] : FALSE;
+        $search = isset($_POST['search']) ? "?search=".$_POST['search'] : '';
         
         $check_name = (bool) preg_match('/^[а-яёa-z\s]{3,100}$/iu', $_POST['name']);
         $check_tel = (bool) preg_match('/^\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}$/', $_POST['tel']);
         $check_post = (bool) preg_match('/^[а-яё\s]{3,30}$/iu', $_POST['post']);
         $check_image = (bool) array_key_exists($_FILES["image"]["type"], $ext);
-        
-        $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".'?name='.$_POST['name'].'&tel='.$_POST['tel'].'&post='.$_POST['post'];
-        
+                
         if ($id) {//если передан id, то в случае возврата на страницу сотрудников откроется форма редактирования потому что state=1
-            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".'?id='.$id."&state=1";
+            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".$search.'&id='.$id."&state=1";
         }
         else{//если нет, то откроется форма добавления (state=0)
-            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".'?name='.$_POST['name'].'&tel='.$_POST['tel'].'&post='.$_POST['post'].'&state=0';
+            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/employees".$search.'&?name='.$_POST['name'].'&tel='.$_POST['tel'].'&post='.$_POST['post'].'&state=0'.$search;
         }
-        $ref = 'http://'.$_SERVER["SERVER_NAME"]."/employees";
+
+        $ref = 'http://'.$_SERVER["SERVER_NAME"]."/employees".$search;
 
         if ($check_name && $check_post && $check_tel){
             $name = $_POST['name'];

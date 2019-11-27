@@ -9,7 +9,6 @@
     $page_title = "Сотрудники";
     $nav_active = 5;
     $fa = true;
-    $ref = isset($_COOKIE['ref']) ? preg_replace('/search=.*/','',$_COOKIE['ref']): 'reservations';
     setcookie("ref", $_SERVER['REQUEST_URI']);
     require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
     require_once($_CONFIG['DATABASE']['CONNECT']);
@@ -37,6 +36,7 @@
     $post = isset($_GET["post"]) ? $_GET["post"] : $post;
     $image_name = isset($_GET["image_name"]) ? $_GET["image_name"] : $image_name;
     $search = isset($_GET["search"]) ? $_GET["search"] : NULL;
+    $search_get = $search?'&search='.$search:'';
     if ($search){
       $search_unscaped = preg_replace("/[()\-\+]/", '', $search);
       $search_query = '/('.preg_replace("/\s/", ')|(', $search_unscaped).')/iu';
@@ -87,6 +87,9 @@
                   <form action="<?=$_CONFIG['EMPLOYEES']['HANDLE']?>" enctype="multipart/form-data" method="POST" class="needs-validation" novalidate>
                     <?if ($id):?>
                       <input type="hidden" id="id" name="id" value="<?=$id?>">
+                    <?endif;?>
+                    <?if ($search):?>
+                      <input type="hidden" id="search" name="search" value="<?=$search?>">
                     <?endif;?>
                     <?if ($image_name):?>
                       <input type="hidden" id="image_name" name="image_name" value="<?=$image_name?>">
@@ -151,7 +154,7 @@
           <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#handlerModal"><i class="fas fa-user mr-2"></i>Добавить сотрудника</button>
           <div>
             <?if($search):?>
-              <a href="<?=$ref?>" class="btn btn-sm btn-outline-secondary mr-2">Сбросить</a>
+              <a href="employees" class="btn btn-sm btn-outline-secondary mr-2">Сбросить</a>
             <?endif;?>
             <form class="form-inline d-inline" id="search-form" action="" method="GET" novalidate>
               <input class="form-control form-control-sm mr-2" type="search" name="search" id="search" placeholder="Поиск сотрудника" aria-label="Поиск" value="<?=$search?>" <? if(!$search) echo("required")?>>
@@ -227,9 +230,9 @@
                           <td class="text-center"><?=$result_value['e_tel']?></td>
                           <td class="text-center"><?=$result_value['e_post']?></td>
                           <td class="text-center">
-                            <a title="Редактировать" href="employees?id=<?=$result_value['e_id']?>&state=1" class="text-muted mr-2" rel="nofollow"><i class="fas fa-edit"></i></a>
-                            <a title="Дублировать" href="<?=$_CONFIG['EMPLOYEES']['CPY']?>?id=<?=$result_value['e_id']?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
-                            <a title="Удалить" href="employees?id=<?=$result_value['e_id']?>&state=2" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
+                            <a title="Редактировать" href="employees?id=<?=$result_value['e_id']?>&state=1<?=$search_get?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-edit"></i></a>
+                            <a title="Дублировать" href="<?=$_CONFIG['EMPLOYEES']['CPY']?>?id=<?=$result_value['e_id'].$search_get?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
+                            <a title="Удалить" href="employees?id=<?=$result_value['e_id']?>&state=2<?=$search_get?>" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
                           </td>
                         </tr>
                       <?}

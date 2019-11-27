@@ -4,6 +4,7 @@
         require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
         require_once($_CONFIG['DATABASE']['CONNECT']);
 
+        $search = isset($_POST['search']) ? "?search=".$_POST['search'] : '';
         $id = isset($_POST['id']) ? $_POST['id'] : FALSE;
         $check_name = (bool) preg_match('/^[а-яёa-z\s]{3,25}$/iu', $_POST['name']);
         $check_tel = (bool) preg_match('/^\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}$/', $_POST['tel']);
@@ -11,14 +12,13 @@
         $check_time = (bool) preg_match('/^([0-1]\d|2[0-3])(:[0-5]\d)(:\d\d)?$/', $_POST['time']);
         $check_table = (bool) preg_match('/^[0-9]$|^[1-5][0-9]$|^6[0-8]$/', $_POST['table_number']);
 
-        $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/reservations".'?name='.$_POST['name'].'&tel='.$_POST['tel'].'&date='.$_POST['date'].'&time='.$_POST['time'].'&table_number='.$_POST['table_number'].'&deposit='.$_POST['deposit'];
-        if ($id) {
-            $ref_w_get = $ref_w_get . "&state=1";
+        if ($id) {//если передан id, то в случае возврата на страницу сотрудников откроется форма редактирования потому что state=1
+            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/reservations".$search.'&id='.$id."&state=1";
         }
         else{
-            $ref_w_get = $ref_w_get . "&state=0";
+            $ref_w_get = 'http://'.$_SERVER["SERVER_NAME"]."/reservations".$search.'&name='.$_POST['name'].'&tel='.$_POST['tel'].'&date='.$_POST['date'].'&time='.$_POST['time'].'&table_number='.$_POST['table_number'].'&deposit='.$_POST['deposit']."&state=0".$search;
         }
-        $ref = 'http://'.$_SERVER["SERVER_NAME"]."/reservations";
+        $ref = 'http://'.$_SERVER["SERVER_NAME"]."/reservations".$search;
 
         if ($check_name && $check_tel && $check_date && $check_time && $check_table) {
             $name = $_POST['name'];

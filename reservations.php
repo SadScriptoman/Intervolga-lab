@@ -15,21 +15,8 @@
     require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
     require_once($_CONFIG['DATABASE']['CONNECT']);
     require_once($_CONFIG['TEMPLATES']['HEADER']);
-    require_once($_CONFIG['FUNCTIONS_PATH']. 'weight-sort.php');
+    require_once($_CONFIG['FUNCTIONS_PATH'].'weight-sort.php');
 
-    $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
-    $name = isset($_GET["name"]) ? $_GET["name"] : NULL;
-    $tel = isset($_GET["tel"]) ? $_GET["tel"] : NULL;
-    $date = isset($_GET["date"]) ? $_GET['date'] : NULL;
-    $time = isset($_GET["time"]) ? $_GET['time'] : NULL;
-    $table_number = isset($_GET["table_number"]) ? $_GET["table_number"] : NULL;
-    $deposit = isset($_GET["deposit"]) ? $_GET["deposit"] : 0;
-    $edit = isset($_GET["edit"]) ? $_GET["edit"] : 'false';
-    $confirmed = isset($_GET["confirmed"]) ? $_GET["confirmed"] : 'true';
-
-    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
-    require_once($_CONFIG['DATABASE']['CONNECT']);
-    require_once($_CONFIG['TEMPLATES']['HEADER']);
     $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
     $state = isset($_GET["state"]) ? $_GET["state"] : -1;
     $name = NULL;
@@ -58,6 +45,7 @@
     $table_number = isset($_GET["table_number"]) ? $_GET["table_number"] : $table_number;
     $deposit = isset($_GET["deposit"]) ? $_GET["deposit"] : $deposit;
     $search = isset($_GET["search"]) ? preg_replace("/[()-+]/", '', $_GET["search"]) : NULL;
+    $search_get = $search?'&search='.$search:'';
     if ($search){
       $search_unscaped = preg_replace("/[()\-\+]/", '', $search);
       $search_query = '('.preg_replace("/\s/", ')|(', $search_unscaped).')';
@@ -144,7 +132,12 @@
                   </button>
                 </div>
                 <form action="<?=$_CONFIG['RESERVATIONS']['HANDLE']?>" method="POST" class="needs-validation" novalidate>
-                  <input type="hidden" id="id" name="id" value="<?=$id?>">
+                  <?if ($id):?>
+                    <input type="hidden" id="id" name="id" value="<?=$id?>">
+                  <?endif;?>
+                  <?if ($search):?>
+                    <input type="hidden" id="search" name="search" value="<?=$search?>">
+                  <?endif;?>
                   <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Фамилия</label>
@@ -207,7 +200,7 @@
           </div>
           <div>
             <?if($search):?>
-              <a href="<?=$ref?>" class="btn btn-sm btn-outline-secondary mr-2">Сбросить</a>
+              <a href="reservations" class="btn btn-sm btn-outline-secondary mr-2">Сбросить</a>
             <?endif;?>
             <form class="form-inline d-inline" id="search-form" action="" method="GET" novalidate>
               <input class="form-control form-control-sm mr-2" type="search" name="search" id="search" placeholder="Поиск брони" aria-label="Поиск" value="<?=$search?>" <? if(!$search) echo("required")?> >
@@ -287,9 +280,9 @@
                           <td class="text-center"><?=date('d.m.Y', strtotime($result_value['date']))?></td>
                           <td class="text-center"><?=$result_value['time']?></td>
                           <td class="text-center">
-                            <a title="Редактировать" href="reservations?id=<?=$result_value['reservation_id']?>&state=1" class="text-muted mr-2" rel="nofollow"><i class="fas fa-edit"></i></a>
-                            <a title="Дублировать" href="<?=$_CONFIG['RESERVATIONS']['CPY']?>?id=<?=$result_value['reservation_id']?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
-                            <a title="Удалить" href="reservations?id=<?=$result_value['reservation_id']?>&state=2" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
+                            <a title="Редактировать" href="reservations?id=<?=$result_value['reservation_id']?>&state=1<?=$search_get?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-edit"></i></a>
+                            <a title="Дублировать" href="<?=$_CONFIG['RESERVATIONS']['CPY']?>?id=<?=$result_value['reservation_id'].$search_get?>" class="text-muted mr-2" rel="nofollow"><i class="fas fa-copy"></i></a>
+                            <a title="Удалить" href="reservations?id=<?=$result_value['reservation_id']?>&state=2<?=$search_get?>" class="text-danger" rel="nofollow"><i class="fas fa-trash-alt"></i></a>
                           </td>
                         </tr>
                       <?}
