@@ -1,16 +1,18 @@
 <?   
-    session_start();
-    if (isset($_SESSION['login']) && ($_SERVER['REQUEST_METHOD'] == "GET") && isset($_GET["id"])){   
-        require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['AUTHORIZATION']['IS_LOGGED']);
+
+    if ($logged && ($_SERVER['REQUEST_METHOD'] == "GET") && isset($_GET["id"])){   
         require_once($_CONFIG['DATABASE']['CONNECT']);
         $str = $db->prepare("SELECT e_photo FROM employees WHERE e_id = {$_GET["id"]}");
         $str->execute();
         $result = $str->fetch();
+        $search = isset($_GET['search']) ? "?search=".$_GET['search'] : '';
         if ($result){
             unlink($_CONFIG["EMPLOYEES"]["FULL_PATH_TO_PHOTOS"].$result[0]);
             $str = $db->prepare("DELETE FROM employees WHERE e_id = {$_GET["id"]}");
             if ($str->execute()){
-                $ref = 'http://'.$_SERVER["SERVER_NAME"]."/employees";
+                $ref = 'http://'.$_SERVER["SERVER_NAME"]."/employees".$search;
                 header("Location: ".$ref);
             } else{
                 die("Запрос не выполнен! Попробуйте снова.");   

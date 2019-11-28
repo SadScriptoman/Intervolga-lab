@@ -7,9 +7,9 @@
     <title><?=$page_title?></title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="core/src/bootstrap/bootstrap.min.css" >
-    <link rel="stylesheet" href="core/src/css/main.css?v=1.111">
-    <link rel="stylesheet" href="core/src/css/all.css"> 
+    <link rel="stylesheet" href=<?=$_src."/bootstrap/bootstrap.min.css"?> >
+    <link rel="stylesheet" href=<?=$_src."/css/main.css"?>>
+    <link rel="stylesheet" href=<?=$_src."/css/all.css"?>> 
 
 
   </head>
@@ -33,7 +33,7 @@
             <li class="nav-item <? if ($nav_active == 3) echo "active"; ?>">
                 <a class="nav-link" href="map">Рестораны</a>
             </li>
-            <? if (isset($_SESSION['login'])):?>
+            <? if ($logged):?>
               <li class="nav-item <? if ($nav_active == 4) echo "active"; ?>">
                   <a class="nav-link" href="reservations">Забронированные столики</a>
               </li>
@@ -46,7 +46,7 @@
             <? endif;?>
           </ul>
           
-          <? if (!isset($_SESSION['login'])):?>
+          <? if (!$logged):?>
             <span class="mr-3 d-block mb-2 mt-2" style="color: white;">09:00 - 23:00, ПН-ВС</span>
             <a class="btn btn-outline-light" href="login">Войти<i class="fas fa-sign-in-alt ml-2"></i></a>
           <? else:?>
@@ -70,7 +70,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-        <a title="Выйти" href="core/magic/logout" class="btn btn-primary" rel="nofollow">Выйти</a>
+        <a title="Выйти" href='<?=$_CONFIG['AUTHORIZATION']['LOGOUT']?>' class="btn btn-primary" rel="nofollow">Выйти</a>
       </div>
     </div>
   </div>

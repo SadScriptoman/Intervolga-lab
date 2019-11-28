@@ -56,6 +56,25 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
   width:10%;
 }
 
+.alert{
+  position: absolute;
+  top:80px;
+  z-index: 10;
+  margin-right: 40px;
+  margin-left: 40px;
+  width: calc(100% - 80px);
+  margin-bottom: 40px;
+}
+
+#login > .alert{
+  top: 40px;
+}
+
+#main{
+  position: relative;
+  top:60px;
+}
+
   /* CUSTOMIZE THE CAROUSEL
   -------------------------------------------------- */
   

@@ -1,7 +1,7 @@
-<script src="core/src/js/jquery-3.4.1.min.js" ></script>
-<script src="core/src/js/mask.min.js" ></script>
-<script src="core/src/js/custom-file-input.js" ></script>
-<script src="core/src/bootstrap/bootstrap.bundle.min.js" ></script>
+<script src="<?=$_src?>/js/jquery-3.4.1.min.js" ></script>
+<script src="<?=$_src?>/js/mask.min.js" ></script>
+<script src="<?=$_src?>/js/custom-file-input.js" ></script>
+<script src="<?=$_src?>/bootstrap/bootstrap.bundle.min.js" ></script>
 
 
 <script type="text/javascript">

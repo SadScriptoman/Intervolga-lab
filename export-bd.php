@@ -1,8 +1,8 @@
 <?php 
-    if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
-    session_start();
-    if (isset($_SESSION['login'])){
-        require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['AUTHORIZATION']['IS_LOGGED']);
+
+    if ($logged){
         $mysqlUserName      = $_CONFIG['DATABASE']['USERNAME'];
         $mysqlPassword      = $_CONFIG['DATABASE']['PASS'];
         $mysqlHostName      = $_CONFIG['DATABASE']['HOST'];
@@ -82,7 +82,7 @@
         //$backup_name = $backup_name ? $backup_name : $name."___(".date('H-i-s')."_".date('d-m-Y').")__rand".rand(1,11111111).".sql";
         $backup_name = $backup_name ? $backup_name : $name.".sql";
         if (file_put_contents ( $backup_name, $content)){
-            $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index";
+            $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : $_MAIN_PAGE;
             header("Location: ".$ref);
         }
         else{

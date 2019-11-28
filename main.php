@@ -2,15 +2,16 @@
   $page_title = "Главная";
   $nav_active = 1;
   $fa = false;
-  if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
-  session_start();
-  setcookie("ref", $_SERVER['REQUEST_URI']);
+
   require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+  require_once($_CONFIG['AUTHORIZATION']['IS_LOGGED']); 
+
+  setcookie("ref", $_SERVER['REQUEST_URI']);
   require_once($_CONFIG['ANALITYCS']['FULL_PATH_TO_MODULE']);
   require_once($_CONFIG['TEMPLATES']['HEADER']);
 ?>
 
-<main role="main" id="main">
+<main role="main" >
 
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">

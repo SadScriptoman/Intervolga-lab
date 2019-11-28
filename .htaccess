@@ -7,6 +7,10 @@ RewriteRule .* - [L,R=404]
 
 DirectoryIndex main.php
 
+ErrorDocument 409 /409.php
+ErrorDocument 404 /404.php
+ErrorDocument 401 /401.php
+
 <IfModule mod_headers.c>
         Header append Cache-Control "no-store, no-cache, must-revalidate"
 </IfModule>

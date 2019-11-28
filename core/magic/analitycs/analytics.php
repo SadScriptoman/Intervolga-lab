@@ -34,12 +34,12 @@
                     $str = $db->prepare("INSERT INTO pages (page_url, page_title) VALUES ('$page_url', '$page_title')");
                 else
                     $str = $db->prepare("INSERT INTO pages (page_url) VALUES ('$page_url')");                
-                $str->execute() or die('<br><br><div class="alert container alert-danger mt-5" role="alert">Произошла ошибка с отправкой данных в таблицу pages!</div>');
+                $str->execute() or die('<div class="alert alert-danger" role="alert">Произошла ошибка с отправкой данных в таблицу pages!</div>');
 
                 $str = $db->prepare("SELECT page_id FROM pages WHERE page_url = '$page_url'");
-                $str->execute() or die('<br><br><div class="alert container alert-danger mt-5" role="alert">Произошла ошибка с отправкой данных в таблицу pages!</div>');
+                $str->execute() or die('<div class="alert alert-danger" role="alert">Произошла ошибка с отправкой данных в таблицу pages!</div>');
                 $result = $str->fetch(PDO::FETCH_ASSOC);
-                if (isset($_SESSION['login'])) echo '<br><br><div class="alert container alert-success mt-5" role="alert">Страница добавлена в аналитику!</div>';
+                if (isset($_SESSION['login'])) echo '<div class="alert alert-success" role="alert">Страница добавлена в аналитику!</div>';
             }
             $page_id = (int)$result["page_id"];
 
@@ -56,6 +56,5 @@
             }
 
         }
-        else echo '<div class="alert container alert-danger mt-5" role="alert">Аналитика не работает, так как подключение к бд настрено неправильно!</div>';
     }
 ?>

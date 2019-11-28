@@ -1,14 +1,14 @@
 <?
-    session_start();
-    if ((isset($_SESSION['login'])) && ($_SERVER['REQUEST_METHOD'] == "GET") && (isset($_GET["id"]))){
+    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['AUTHORIZATION']['IS_LOGGED']);
+
+    if ($logged && ($_SERVER['REQUEST_METHOD'] == "GET") && (isset($_GET["id"]))){
         $ext = array('image/png'=>'.png', 'image/jpeg'=>'.jpg');
-        require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
         require_once($_CONFIG['DATABASE']['CONNECT']);
-        require_once($_CONFIG['FUNCTIONS_PATH']."translit.php");
-        require_once($_CONFIG['FUNCTIONS_PATH']."image-manipulation.php");
         $str = $db->prepare("SELECT * FROM reservations WHERE reservation_id = {$_GET["id"]}");
         $str->execute();
         $result = $str->fetch();
+        $search = isset($_GET['search']) ? "?search=".$_GET['search'] : '';
         if ($result){     
             $name = $result['name'];
             $tel = $result['telephone'];
@@ -16,10 +16,12 @@
             $time = date("Y-m-d H:i:s", strtotime($result['time']));
             $table_number = $result['table_number'];
             $deposit = isset($result['deposit']) ? $result['deposit']:NULL;
-            
-            $str = $db->prepare("INSERT INTO reservations (name, telephone, deposit, date, time, table_number) VALUES ('$name', '$tel', '$deposit', '$date', '$time', '$table_number')");
+            $date_time = preg_replace('/\-/',' ',$_POST['date']) .' '.preg_replace('/\:/',' ',$_POST['time']);
+
+            $str = $db->prepare("INSERT INTO reservations (name, telephone, deposit, date, time, table_number, date_time) 
+            VALUES ('$name', '$tel', '$deposit', '$date', '$time', '$table_number', '$date_time')");
             if ($str->execute()) {
-                $ref = 'http://'.$_SERVER["SERVER_NAME"]."/reservations";
+                $ref = 'http://'.$_SERVER["SERVER_NAME"]."/reservations".$search;
                 header("Location: ".$ref);
             }
             else{

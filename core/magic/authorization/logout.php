@@ -5,6 +5,6 @@
     }
     session_start();
     session_destroy();
-    $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : "index";
+    $ref = (isset($_COOKIE['ref'])) ? $_COOKIE['ref'] : $_MAIN_PAGE;
     header("Location: ".$ref);
 ?>

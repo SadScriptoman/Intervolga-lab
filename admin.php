@@ -1,28 +1,25 @@
 <?php
-  if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
-  session_start();
-  if (!isset($_SESSION['login'])){
-    header('HTTP/1.0 404 Not Found');
-    header('Status: 404 Not Found');
+  require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+
+  if (!$logged){
+    header("HTTP/1.1 401 Unauthorized");
+    include("401.php");
+    exit;
   }
   else{
     $page_title = "Админ панель";
     $nav_active = 6;
     $fa = false;
+    
     setcookie("ref", $_SERVER['REQUEST_URI']);
-    require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
     require_once($_CONFIG['DATABASE']['CONNECT']);
     require_once($_CONFIG['TEMPLATES']['HEADER']);
 ?>
 
-  <main role="main" id="main" style="min-height: 100vh" <? if (isset($_SESSION['login'])) echo "class=\"bg-dark\"";?>>
-      <div class="mt-5 container">
-          <? if ((!isset($_SESSION['login']) || ($db == NULL))):
-              ?>
-              <h1>
-                Вы должны зайти в аккаунт чтобы просмотреть содержимое!
-              </h1>
-          <? elseif ($db):
+  <main role="main" id="main" style="min-height: 100vh" class="bg-dark">
+      <div class="container">
+
+          <?if ($db): 
               $pages = $db->query("SELECT * FROM pages");
               $visitors = $db->query("SELECT * FROM analytics");
           ?>

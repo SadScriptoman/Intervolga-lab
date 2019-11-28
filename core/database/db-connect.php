@@ -4,7 +4,13 @@
     try{
         $db = new PDO('mysql:host='.$_CONFIG['DATABASE']['HOST'].';dbname='.$_CONFIG['DATABASE']['NAME'].';charset='.$_CONFIG['DATABASE']['CHARSET'], $_CONFIG['DATABASE']['USERNAME'], $_CONFIG['DATABASE']['PASS']);
     }catch(PDOException $e){
-        echo '<br><br><div class="alert container alert-danger mt-5" role="alert">
-        Подключение к бд не удалось: ' . $e->getMessage(). '</div>';
+        if($logged){
+            echo '<div class="alert alert-danger text-left fade show" role="alert">
+                Подключение к бд не удалось: ' . $e->getMessage(). '
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>';
+        }
     }
 ?>

@@ -2,17 +2,16 @@
     $page_title = "Меню";
     $nav_active = 2;
     $fa = false;
-    if (isset($_COOKIE['session_id'])) session_id($_COOKIE['session_id']);
-    session_start();
-    setcookie("ref", $_SERVER['REQUEST_URI']);
     require_once($_SERVER['DOCUMENT_ROOT'] . "/config/config.php");
+    require_once($_CONFIG['AUTHORIZATION']['IS_LOGGED']); 
+
     require_once($_CONFIG['ANALITYCS']['FULL_PATH_TO_MODULE']);
     require_once($_CONFIG['TEMPLATES']['HEADER']);
 ?>
 
 <main role="main" id="main">
 
-    <div class="container mt-5">
+    <div class="container">
         <ul class="nav justify-content-center nav-pills">
             <li class="nav-item">
               <a class="nav-link active" href="#">Все позиции</a>
